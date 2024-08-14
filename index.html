@@ -53,17 +53,78 @@
     li:hover {
       background-color: #f0f0f0;
     }
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    #container {
+      text-align: center;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    li:hover {
+      background-color: #f0f0f0;
+    }
+    #dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #dialog input,
+    #dialog textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
-    <div id="container">
-      <h1>ToDo List</h1>
-      <input type="text" id="taskInput" placeholder="Enter a new task">
-      <button onclick="addTask()">Add Task</button>
-      <ul id="taskList"></ul>
-      <!-- 新增置顶按钮 -->
-      <button onclick="toggleAlwaysOnTop()">Toggle Always On Top</button>
-    </div>
-    <script src="renderer.js"></script>
-  </body>
-  </html>
+  <div id="container">
+    <h1>ToDo List</h1>
+    <input type="text" id="taskTitle" placeholder="Enter task title">
+    <input type="datetime-local" id="taskTime">
+    <button onclick="addTask()">Add Task</button>
+    <h2>Unfinished Tasks</h2>
+    <ul id="unfinishedTasks"></ul>
+    <h2>Completed Tasks</h2>
+    <ul id="finishedTasks"></ul>
+    <button onclick="toggleAlwaysOnTop()">Toggle Always On Top</button>
+    <div id="status">Current Status: Not Always on Top</div>
+  </div>
+
+  <!-- 对话框 -->
+  <div id="dialog">
+    <h3>Edit Task</h3>
+    <input type="text" id="editTaskTitle" placeholder="Task title">
+    <input type="datetime-local" id="editTaskTime">
+    <textarea id="taskDetails" placeholder="Enter task details"></textarea>
+    <button onclick="saveTask()">Save</button>
+    <button onclick="closeDialog()">Cancel</button>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

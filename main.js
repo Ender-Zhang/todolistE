@@ -8,7 +8,7 @@ function createWindow() {
     height: 300,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: false, // 确保上下文隔离关闭
     },
   });
 
