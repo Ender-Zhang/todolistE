@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo List</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 添加全局样式以居中内容 */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    #container {
+      text-align: center;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    li:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+    <div id="container">
+      <h1>ToDo List</h1>
+      <input type="text" id="taskInput" placeholder="Enter a new task">
+      <button onclick="addTask()">Add Task</button>
+      <ul id="taskList"></ul>
+      <!-- 新增置顶按钮 -->
+      <button onclick="toggleAlwaysOnTop()">Toggle Always On Top</button>
+    </div>
+    <script src="renderer.js"></script>
+  </body>
+  </html>
