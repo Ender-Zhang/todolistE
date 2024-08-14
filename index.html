@@ -5,11 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDo List</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <div id="container">
+  <div id="top-bar">
     <h1>ToDo List</h1>
+    <button onclick="toggleAlwaysOnTop()" id="toggle-btn" title="Toggle Always On Top">
+      <i class="fas fa-thumbtack"></i>
+    </button>
+  </div>
+  
+  <div id="container">
     <label for="taskTitle">Task Title:</label>
     <input type="text" id="taskTitle" name="taskTitle" placeholder="Enter task title">
     
@@ -17,28 +24,12 @@
     <input type="datetime-local" id="taskTime" name="taskTime">
     
     <button onclick="addTask()">Add Task</button>
+    
     <h2>Unfinished Tasks</h2>
     <ul id="unfinishedTasks"></ul>
+    
     <h2>Completed Tasks</h2>
     <ul id="finishedTasks"></ul>
-    <button onclick="toggleAlwaysOnTop()">Toggle Always On Top</button>
-    <div id="status">Current Status: Not Always on Top</div>
-  </div>
-
-  <!-- 对话框 -->
-  <div id="dialog">
-    <h3>Edit Task</h3>
-    <label for="editTaskTitle">Task Title:</label>
-    <input type="text" id="editTaskTitle" name="editTaskTitle" placeholder="Edit task title">
-    
-    <label for="editTaskTime">Task Time:</label>
-    <input type="datetime-local" id="editTaskTime" name="editTaskTime">
-    
-    <label for="taskDetails">Task Details:</label>
-    <textarea id="taskDetails" name="taskDetails" placeholder="Enter task details"></textarea>
-    
-    <button onclick="saveTask()">Save</button>
-    <button onclick="closeDialog()">Cancel</button>
   </div>
 
   <script src="renderer.js"></script>

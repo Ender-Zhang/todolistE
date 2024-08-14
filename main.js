@@ -1,35 +1,68 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
 
-let win;
+let mainWindow;
+let editWindow;
 
 function createWindow() {
-  win = new BrowserWindow({
-    width: 400,
-    height: 500,
+  mainWindow = new BrowserWindow({
+    width: 300,
+    height: 600,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false, // 确保上下文隔离关闭
-    },
+      contextIsolation: false
+    }
   });
 
-  win.loadFile('index.html');
+  mainWindow.loadFile('index.html');
 
-  // 接收前端发来的置顶请求
-  ipcMain.on('toggle-always-on-top', (event, isAlwaysOnTop) => {
-    win.setAlwaysOnTop(isAlwaysOnTop);
+  mainWindow.on('closed', function () {
+    mainWindow = null;
   });
 }
 
-app.whenReady().then(createWindow);
+function createEditWindow(taskData) {
+  editWindow = new BrowserWindow({
+    width: 500,
+    height: 600,
+    parent: mainWindow,
+    modal: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  editWindow.loadFile('edit.html');
+
+  editWindow.webContents.on('did-finish-load', () => {
+    editWindow.webContents.send('task-data', taskData);
+  });
+
+  editWindow.on('closed', function () {
+    editWindow = null;
+  });
+}
+
+app.on('ready', createWindow);
+
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') app.quit();
 });
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+app.on('activate', function () {
+  if (mainWindow === null) createWindow();
+});
+
+ipcMain.on('edit-task', (event, taskData) => {
+  createEditWindow(taskData);
+});
+
+ipcMain.on('task-updated', (event, updatedTask) => {
+  mainWindow.webContents.send('update-task', updatedTask);
+  editWindow.close();
+});
+
+ipcMain.on('toggle-always-on-top', (event, flag) => {
+  mainWindow.setAlwaysOnTop(flag);
 });

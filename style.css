@@ -2,80 +2,137 @@
 body, html {
     height: 100%;
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
 }
 
 /* 容器样式 */
 #container {
-    text-align: center;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 50px auto;
 }
 
 /* 标题样式 */
-h1 {
+h1, h2 {
+    color: #2c3e50;
     margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
+}
+
+h1 {
+    font-size: 28px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+h2 {
+    font-size: 22px;
+    margin-top: 30px;
 }
 
 /* 输入框和按钮样式 */
 input[type="text"],
 input[type="datetime-local"] {
-    padding: 10px;
-    width: 80%;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="datetime-local"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    outline: none;
 }
 
 button {
-    padding: 10px 20px;
-    margin: 5px;
+    padding: 12px 20px;
+    margin: 10px 5px;
     border: none;
-    background-color: #5cb85c;
+    background-color: #3498db;
     color: white;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.1s;
+    font-size: 16px;
 }
 
 button:hover {
-    background-color: #4cae4c;
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 /* 列表样式 */
 ul {
     list-style: none;
     padding: 0;
+    margin-top: 20px;
 }
 
-li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
+.task-item {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-content {
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s;
 }
 
-li:hover {
-    background-color: #f0f0f0;
+.task-title {
+    font-weight: bold;
+}
+
+.task-time {
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.task-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    font-size: 18px;
+    transition: color 0.3s;
+    padding: 5px;
+}
+
+.task-btn:hover {
+    color: #3498db;
 }
 
 #status {
-    margin-top: 10px;
+    margin-top: 20px;
     font-weight: bold;
-    color: #555;
+    color: #7f8c8d;
 }
 
 /* 对话框样式 */
@@ -86,49 +143,117 @@ li:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+    width: 90%;
+    max-width: 400px;
 }
 
 #dialog input,
 #dialog textarea {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#dialog input:focus,
+#dialog textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+#dialog button {
+    margin-top: 10px;
+}
+
+/* 添加以下样式到现有的 CSS 文件中 */
+
+#edit-container {
+    padding: 20px;
+    max-width: 100%;
+}
+
+#edit-container h2 {
+    margin-bottom: 20px;
+}
+
+#edit-container input,
+#edit-container textarea {
+    width: 100%;
     padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
     border-radius: 5px;
 }
-.task-item {
+
+#edit-container textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+#edit-container button {
+    margin-right: 10px;
+}
+
+/* 现有的 CSS 代码 */
+
+/* 更新顶部栏样式 */
+#top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #3498db;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    z-index: 1000;
 }
 
-.task-item:hover {
-    background-color: #f0f0f0;
+#top-bar h1 {
+    color: white;
+    margin: 0;
+    font-size: 24px;
 }
 
-.button-container {
-    display: flex;
-    gap: 10px; /* 按钮之间的间距 */
-}
-
-.task-btn {
-    background: none;
+#toggle-btn {
+    background-color: transparent;
+    color: white;
     border: none;
+    padding: 8px;
     cursor: pointer;
-    color: #555;
-    font-size: 18px;
     transition: color 0.3s;
+    font-size: 20px;
 }
 
-.task-btn:hover {
-    color: #000;
+#toggle-btn:hover {
+    color: #f1c40f;
 }
+
+#toggle-btn.active {
+    color: #f1c40f;
+}
+
+/* 调整主容器的上边距 */
+#container {
+    margin-top: 60px; /* 根据顶部栏的实际高度调整 */
+    padding: 20px;
+}
+
+/* 调整body的样式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* 其他现有的 CSS 代码 */
