@@ -139,6 +139,74 @@ function updateStatus() {
     status.textContent = isAlwaysOnTop ? 'Current Status: Always on Top' : 'Current Status: Not Always on Top';
 }
 
+function renderTasks() {
+    const unfinishedTasks = document.getElementById('unfinishedTasks');
+    const finishedTasks = document.getElementById('finishedTasks');
+    
+    unfinishedTasks.innerHTML = '';
+    finishedTasks.innerHTML = '';
+
+    tasks.forEach(task => {
+        const li = document.createElement('li');
+        li.className = "task-item";
+        li.textContent = `${task.title} - ${task.time || 'No Time Set'}`;
+        li.onclick = () => editTask(task);
+
+        // 删除按钮
+        const deleteButton = document.createElement('button');
+        deleteButton.className = "task-btn";
+        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        deleteButton.onclick = (e) => {
+            e.stopPropagation();
+            deleteTask(task.id);
+        };
+
+        // 完成或返回按钮
+        const statusButton = document.createElement('button');
+        statusButton.className = "task-btn";
+        if (task.completed) {
+            statusButton.innerHTML = '<i class="fas fa-undo-alt"></i>';
+            statusButton.onclick = (e) => {
+                e.stopPropagation();
+                toggleTaskCompletion(task.id, false);  // 将任务设置为未完成
+            };
+        } else {
+            statusButton.innerHTML = '<i class="fas fa-check-circle"></i>';
+            statusButton.onclick = (e) => {
+                e.stopPropagation();
+                toggleTaskCompletion(task.id, true);  // 将任务设置为已完成
+            };
+        }
+
+        // 将按钮附加到列表项
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = "button-container";
+        buttonContainer.appendChild(statusButton);
+        buttonContainer.appendChild(deleteButton);
+        li.appendChild(buttonContainer);
+
+        if (task.completed) {
+            finishedTasks.appendChild(li);
+        } else {
+            unfinishedTasks.appendChild(li);
+        }
+    });
+}
+
+// 切换任务完成状态
+function toggleTaskCompletion(taskId, completed) {
+    const task = tasks.find(task => task.id === taskId);
+    if (task) {
+        task.completed = completed ? 1 : 0;
+
+        // 更新数据库中的任务完成状态
+        db.run(`UPDATE tasks SET completed = ? WHERE id = ?`, [task.completed, taskId]);
+
+        renderTasks();
+    }
+}
+
+
 // 初始化应用
 function initializeApp() {
     loadTasksFromDatabase();  // 从数据库加载任务

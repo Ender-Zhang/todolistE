@@ -101,3 +101,34 @@ li:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.task-item:hover {
+    background-color: #f0f0f0;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* 按钮之间的间距 */
+}
+
+.task-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.task-btn:hover {
+    color: #000;
+}
