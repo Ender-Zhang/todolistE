@@ -1,0 +1,103 @@
+/* 全局样式 */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* 容器样式 */
+#container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* 标题样式 */
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* 输入框和按钮样式 */
+input[type="text"],
+input[type="datetime-local"] {
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #5cb85c;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+/* 列表样式 */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+li:hover {
+    background-color: #f0f0f0;
+}
+
+#status {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 对话框样式 */
+#dialog {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#dialog input,
+#dialog textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

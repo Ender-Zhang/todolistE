@@ -5,7 +5,7 @@ let win;
 function createWindow() {
   win = new BrowserWindow({
     width: 400,
-    height: 300,
+    height: 500,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false, // 确保上下文隔离关闭
