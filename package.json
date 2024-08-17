@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --mac --win"
+    "build": "electron-builder  --win"
   },
   "build": {
     "appId": "com.yourname.todolistapp",
@@ -19,27 +19,25 @@
       "edit.html",
       "main.js",
       "edit.js",
-      "style.css",
-      "tasks.db"
+      "renderer.js",
+      "style.css"
     ],
-    "mac": {
-      "target": [
-        "dir",
-        "zip"
-      ],
-      "category": "public.app-category.productivity"
-    },
+    "extraResources": [
+      {
+        "from": "tasks.db",
+        "to": "tasks.db"
+      }
+    ],
     "win": {
       "target": [
         {
           "target": "portable",
           "arch": [
             "x64",
-            "arm64"
+            "ia32"
           ]
         }
-      ],
-      "icon": "build/icon.ico"
+      ]
     },
     "linux": {
       "target": [
@@ -54,6 +52,6 @@
     "electron-builder": "^24.13.3"
   },
   "dependencies": {
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.0.2"
   }
 }

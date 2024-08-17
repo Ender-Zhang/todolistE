@@ -1,59 +1,40 @@
 const { ipcRenderer } = require('electron');
-const sqlite3 = require('sqlite3').verbose();
-
-const db = new sqlite3.Database('tasks.db');
 
 let tasks = [];
 let isAlwaysOnTop = false;
-let sortAscending = true;  // 初始化为升序
-
-db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, title TEXT, time TEXT, details TEXT, completed INTEGER)");
-});
+let sortAscending = true;
 
 function addTask() {
-    const taskTitle = document.getElementById('taskTitle').value;
-    const taskTime = document.getElementById('taskTime').value;
+    const taskTitle = document.getElementById('taskTitle');
+    const taskTime = document.getElementById('taskTime');
     
-    if (taskTitle.trim() !== '') {
+    if (taskTitle && taskTitle.value.trim() !== '') {
         const newTask = {
-            id: Date.now().toString(),
-            title: taskTitle,
-            time: taskTime,
+            title: taskTitle.value,
+            time: taskTime ? taskTime.value : '',
             details: '',
             completed: 0
         };
 
-        tasks.push(newTask);
+        ipcRenderer.send('add-task', newTask);
 
-        db.run(`INSERT INTO tasks (id, title, time, details, completed) VALUES (?, ?, ?, ?, ?)`,
-            [newTask.id, newTask.title, newTask.time, newTask.details, newTask.completed]);
-
-        renderTasks();
-        document.getElementById('taskTitle').value = '';
-        document.getElementById('taskTime').value = '';
+        taskTitle.value = '';
+        if (taskTime) taskTime.value = '';
     }
 }
 
-function loadTasksFromDatabase() {
-    db.all("SELECT * FROM tasks", [], (err, rows) => {
-        if (err) {
-            console.error(err.message);
-            return;
-        }
-        tasks = rows;
-        renderTasks();
-    });
+function loadTasks() {
+    ipcRenderer.send('load-tasks');
 }
 
-function renderTasks() {
-    // 根据 sortAscending 变量决定排序方式
-    tasks.sort((a, b) => {
-        const timeA = new Date(a.time);
-        const timeB = new Date(b.time);
-        return sortAscending ? timeA - timeB : timeB - timeA;
-    });
+ipcRenderer.on('tasks-loaded', (event, loadedTasks) => {
+    tasks = loadedTasks;
+    console.log('Tasks loaded:', tasks);  // 调试：输出加载的任务
+    renderTasks();
+});
 
+
+function renderTasks() {
     const unfinishedTasks = document.getElementById('unfinishedTasks');
     const finishedTasks = document.getElementById('finishedTasks');
     
@@ -61,41 +42,57 @@ function renderTasks() {
     finishedTasks.innerHTML = '';
 
     tasks.forEach(task => {
+        console.log('Rendering task:', task);  // 确认每个任务数据是否正确
         const li = document.createElement('li');
         li.className = 'task-item';
         li.innerHTML = `
-            <div class="task-content" onclick="editTask('${task.id}')">
+            <div class="task-content" data-task-id="${task.id}" data-action="edit-task">
                 <span class="task-title">${task.title}</span>
                 <span class="task-time">${task.time || 'No Time Set'}</span>
             </div>
             <div class="button-container">
-                <button class="task-btn" onclick="toggleTaskCompletion('${task.id}', ${!task.completed})">
+                <button class="task-btn" data-task-id="${task.id}" data-action="toggle-completion">
                     ${task.completed ? '↩️' : '✅'}
                 </button>
-                <button class="task-btn" onclick="deleteTask('${task.id}')">🗑️</button>
+                <button class="task-btn" data-task-id="${task.id}" data-action="delete-task">🗑️</button>
             </div>
         `;
-
+    
+        console.log('Created task item:', li);  // 确认生成的 HTML 是否正确
+    
         if (task.completed) {
             finishedTasks.appendChild(li);
         } else {
             unfinishedTasks.appendChild(li);
         }
     });
+    
 }
 
+
 function editTask(taskId) {
-    const task = tasks.find(task => task.id === taskId);
+    console.log('Edit task triggered for taskId:', taskId);
+    const task = tasks.find(task => String(task.id) === String(taskId));
     if (task) {
+        console.log('Task found, opening edit window for task:', task);
         ipcRenderer.send('edit-task', task);
+    } else {
+        console.log('Task not found with id:', taskId);
     }
 }
 
+
 function deleteTask(taskId) {
-    tasks = tasks.filter(task => task.id !== taskId);
-    db.run(`DELETE FROM tasks WHERE id = ?`, [taskId]);
-    renderTasks();
+    ipcRenderer.send('delete-task', taskId);
 }
+
+ipcRenderer.on('task-deleted', (event, success) => {
+    if (success) {
+        loadTasks();  // 重新加载任务列表
+    } else {
+        console.error('Failed to delete task');
+    }
+});
 
 function toggleAlwaysOnTop() {
     isAlwaysOnTop = !isAlwaysOnTop;
@@ -105,45 +102,98 @@ function toggleAlwaysOnTop() {
 
 function updateToggleButton() {
     const toggleBtn = document.getElementById('toggle-btn');
-    if (isAlwaysOnTop) {
-        toggleBtn.classList.add('active');
-        toggleBtn.title = 'Always On Top: On';
-    } else {
-        toggleBtn.classList.remove('active');
-        toggleBtn.title = 'Always On Top: Off';
+    if (toggleBtn) {
+        if (isAlwaysOnTop) {
+            toggleBtn.classList.add('active');
+            toggleBtn.title = 'Always On Top: On';
+        } else {
+            toggleBtn.classList.remove('active');
+            toggleBtn.title = 'Always On Top: Off';
+        }
     }
 }
 
 function toggleTaskCompletion(taskId, completed) {
-    const task = tasks.find(task => task.id === taskId);
+    taskId = String(taskId);  // 确保 taskId 是字符串类型
+    const task = tasks.find(task => String(task.id) === taskId);
     if (task) {
+        console.log('Task found, updating completion status:', { taskId, completed });
         task.completed = completed ? 1 : 0;
-        db.run(`UPDATE tasks SET completed = ? WHERE id = ?`, [task.completed, taskId]);
-        renderTasks();
+        ipcRenderer.send('update-task', task);
+    } else {
+        console.log('Task not found with id:', taskId);
     }
 }
+
+
+
+
 
 ipcRenderer.on('update-task', (event, updatedTask) => {
     const taskIndex = tasks.findIndex(task => task.id === updatedTask.id);
     if (taskIndex !== -1) {
         tasks[taskIndex] = updatedTask;
-        db.run(`UPDATE tasks SET title = ?, time = ?, details = ? WHERE id = ?`,
-            [updatedTask.title, updatedTask.time, updatedTask.details, updatedTask.id]);
+        console.log('Task updated, now re-rendering tasks');  // 确认任务列表重新渲染
         renderTasks();
     }
 });
 
-function initializeApp() {
-    loadTasksFromDatabase();
-    updateStatus();
+
+ipcRenderer.on('task-added', (event, newTask) => {
+    tasks.push(newTask);
+    renderTasks();
+});
+
+function toggleSortOrder() {
+    sortAscending = !sortAscending;
+    renderTasks();
 }
 
-// function toggleSortOrder() {
-//     sortAscending = !sortAscending;
-//     renderTasks();
-// }
+function initializeApp() {
+    loadTasks();
+    updateToggleButton();
 
-// 在合适的位置添加事件监听器
-document.getElementById('sort-btn').addEventListener('click', toggleSortOrder);
+    // 事件绑定
+    const addTaskBtn = document.getElementById('add-task-btn');
+    if (addTaskBtn) {
+        addTaskBtn.addEventListener('click', addTask);
+    }
 
-initializeApp();
+    // 监听未完成任务列表
+    document.getElementById('unfinishedTasks').addEventListener('click', (event) => {
+        const taskId = event.target.closest('.task-item').querySelector('.task-content').dataset.taskId;
+        const action = event.target.dataset.action;
+
+        console.log('Unfinished Task Clicked:', { taskId, action });  // 输出调试信息
+
+        if (action === 'toggle-completion') {
+            toggleTaskCompletion(taskId, true);
+        } else if (action === 'delete-task') {
+            deleteTask(taskId);
+        } else if (taskId) {  // 点击内容部分触发编辑
+            editTask(taskId);
+        }
+    });
+
+    // 监听已完成任务列表
+    document.getElementById('finishedTasks').addEventListener('click', (event) => {
+        const taskId = event.target.closest('.task-item').querySelector('.task-content').dataset.taskId;
+        const action = event.target.dataset.action;
+
+        console.log('Finished Task Clicked:', { taskId, action });  // 输出调试信息
+
+        if (action === 'toggle-completion') {
+            toggleTaskCompletion(taskId, false);
+        } else if (action === 'delete-task') {
+            deleteTask(taskId);
+        }
+    });
+
+    const toggleBtn = document.getElementById('toggle-btn');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleAlwaysOnTop);
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', initializeApp);
