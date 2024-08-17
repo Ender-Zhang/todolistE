@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder  --win"
+    "build": "electron-builder --win"
   },
   "build": {
     "appId": "com.yourname.todolistapp",
@@ -28,7 +28,9 @@
         "to": "tasks.db"
       }
     ],
+    "icon": "assets/icon.png",
     "win": {
+      "icon": "assets/icon1.ico",
       "target": [
         {
           "target": "portable",
