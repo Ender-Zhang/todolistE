@@ -2,7 +2,7 @@
   "name": "todolist-app",
   "version": "1.0.0",
   "description": "A simple TodoList app",
-  "author": "Your Name <youremail@example.com>",
+  "author": "yuz302@pitt.edu",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -23,20 +23,29 @@
       "tasks.db"
     ],
     "mac": {
-      "target": ["dir", "zip"],  
+      "target": [
+        "dir",
+        "zip"
+      ],
       "category": "public.app-category.productivity"
     },
     "win": {
       "target": [
-    {
-      "target": "portable",
-      "arch": ["x64", "arm64"]
-    }
-  ],
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
       "icon": "build/icon.ico"
     },
     "linux": {
-      "target": ["dir", "tar.gz"],  
+      "target": [
+        "dir",
+        "tar.gz"
+      ],
       "category": "Utility"
     }
   },
