@@ -1,80 +1,142 @@
-/* 全局样式 */
+/* Global styles */
 body, html {
     height: 100%;
     margin: 0;
+    padding: 0;
     font-family: 'Roboto', Arial, sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     color: #333;
 }
 
-/* 容器样式 */
-#container {
-    background: white;
-    padding: 30px;
+/* Layout */
+#app {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 50px auto;
 }
 
-/* 标题样式 */
-h1, h2 {
+/* Typography */
+h2, h3 {
     color: #2c3e50;
     margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 28px;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
 }
 
 h2 {
     font-size: 22px;
     margin-top: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
 }
 
-/* 输入框和按钮样式 */
-input[type="text"],
-input[type="datetime-local"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
+h3 {
+    font-size: 18px;
+    color: #7f8c8d;
+}
+
+/* Header and task input */
+header {
+    margin-bottom: 20px;
+}
+
+#task-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#taskTitle, #taskTime {
+    flex: 1;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
 }
 
-input[type="text"]:focus,
-input[type="datetime-local"]:focus {
+#taskTitle:focus, #taskTime:focus {
     border-color: #3498db;
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
     outline: none;
 }
 
-button {
-    padding: 12px 20px;
-    margin: 10px 5px;
+/* Buttons */
+button, .task-btn, #add-task-btn, #toggle-btn {
+    padding: 10px 15px;
     border: none;
-    background-color: #3498db;
-    color: white;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+    transition: all 0.3s ease;
     font-size: 16px;
 }
 
-button:hover {
+#add-task-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+#add-task-btn:hover {
     background-color: #2980b9;
-    transform: translateY(-2px);
 }
 
-button:active {
-    transform: translateY(0);
+#toggle-btn {
+    background: none;
+    color: #7f8c8d;
+    font-size: 20px;
+    padding: 10px;
+    transition: all 0.3s ease;
 }
 
-/* 列表样式 */
+#toggle-btn:hover {
+    color: #2c3e50;
+}
+
+.task-btn {
+    background: none;
+    color: #555;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.task-btn:hover {
+    color: #3498db;
+}
+
+/* Sort controls */
+#sort-controls {
+    margin-bottom: 20px;
+}
+
+#sort-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.sort-btn {
+    padding: 5px 10px;
+    background-color: #ecf0f1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sort-btn:hover, .sort-btn.active {
+    background-color: #bdc3c7;
+}
+
+/* Task lists */
+#task-lists {
+    display: flex;
+    gap: 20px;
+}
+
+#unfinished-tasks, #finished-tasks {
+    flex: 1;
+}
+
 ul {
     list-style: none;
     padding: 0;
@@ -87,6 +149,9 @@ ul {
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .task-item:hover {
@@ -99,6 +164,8 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex: 1;
+    cursor: pointer;
 }
 
 .task-title {
@@ -112,30 +179,10 @@ ul {
 
 .button-container {
     display: flex;
-    gap: 10px;
+    gap: 5px;
 }
 
-.task-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #555;
-    font-size: 18px;
-    transition: color 0.3s;
-    padding: 5px;
-}
-
-.task-btn:hover {
-    color: #3498db;
-}
-
-#status {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #7f8c8d;
-}
-
-/* 对话框样式 */
+/* Dialog */
 #dialog {
     display: none;
     position: fixed;
@@ -159,7 +206,7 @@ ul {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
 }
 
 #dialog input:focus,
@@ -169,12 +216,7 @@ ul {
     outline: none;
 }
 
-#dialog button {
-    margin-top: 10px;
-}
-
-/* 添加以下样式到现有的 CSS 文件中 */
-
+/* Edit container */
 #edit-container {
     padding: 20px;
     max-width: 100%;
@@ -182,15 +224,6 @@ ul {
 
 #edit-container h2 {
     margin-bottom: 20px;
-}
-
-#edit-container input,
-#edit-container textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
 }
 
 #edit-container textarea {
@@ -202,89 +235,37 @@ ul {
     margin-right: 10px;
 }
 
-/* 现有的 CSS 代码 */
-
-/* 更新顶部栏样式 */
-#top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #3498db;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
+/* Status */
+#status {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #7f8c8d;
 }
 
-#top-bar h1 {
-    color: white;
-    margin: 0;
-    font-size: 24px;
-}
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #task-input {
+        flex-wrap: wrap;
+    }
+    
+    #taskTitle, #taskTime {
+        flex-basis: 100%;
+    }
+    
+    #add-task-btn, #toggle-btn {
+        flex-basis: calc(50% - 5px);
+    }
 
-#toggle-btn {
-    background-color: transparent;
-    color: white;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    transition: color 0.3s;
-    font-size: 20px;
-}
-
-#toggle-btn:hover {
-    color: #f1c40f;
+    #task-lists {
+        flex-direction: column;
+    }
 }
 
 #toggle-btn.active {
-    color: #f1c40f;
+    color: #3498db;
+    transform: rotate(45deg);
 }
 
-/* 调整主容器的上边距 */
-#container {
-    margin-top: 60px; /* 根据顶部栏的实际高度调整 */
-    padding: 20px;
-}
-
-/* 调整body的样式 */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #f5f5f5;
-}
-
-/* 保持现有样式不变 */
-
-/* 新增样式 */
-.task-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.task-title-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.task-title-container input {
-    flex: 1;
-    padding-right: 10px;
-}
-
-#pinBtn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    margin-left: 10px;
-}
-
-#pinIcon.pinned {
-    color: #f39c12;
+#toggle-btn:hover {
+    color: #2c3e50;
 }
