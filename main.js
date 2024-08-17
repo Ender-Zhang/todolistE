@@ -26,7 +26,7 @@ function createEditWindow(taskData) {
     width: 500,
     height: 600,
     parent: mainWindow,
-    modal: true,
+    modal: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -65,4 +65,10 @@ ipcMain.on('task-updated', (event, updatedTask) => {
 
 ipcMain.on('toggle-always-on-top', (event, flag) => {
   mainWindow.setAlwaysOnTop(flag);
+});
+
+ipcMain.on('toggle-edit-window-on-top', (event, flag) => {
+    if (editWindow) {
+        editWindow.setAlwaysOnTop(flag);
+    }
 });

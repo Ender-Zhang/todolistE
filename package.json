@@ -1,14 +1,47 @@
 {
-  "name": "todolistE",
+  "name": "todolist-app",
   "version": "1.0.0",
+  "description": "A simple TodoList app",
+  "author": "Your Name <youremail@example.com>",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder --mac --win"
+  },
+  "build": {
+    "appId": "com.yourname.todolistapp",
+    "productName": "TodoList App",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "edit.html",
+      "main.js",
+      "edit.js",
+      "style.css",
+      "tasks.db"
+    ],
+    "mac": {
+      "target": ["dir", "zip"],  
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+    {
+      "target": "portable",
+      "arch": ["x64", "arm64"]
+    }
+  ],
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": ["dir", "tar.gz"],  
+      "category": "Utility"
+    }
   },
   "devDependencies": {
-    "electron": "^31.3.1"
-  },
-  "dependencies": {
-    "sqlite3": "^5.1.7"
+    "electron": "^25.0.0",
+    "electron-builder": "^24.13.3"
   }
 }

@@ -256,4 +256,35 @@ body {
     background-color: #f5f5f5;
 }
 
-/* 其他现有的 CSS 代码 */
+/* 保持现有样式不变 */
+
+/* 新增样式 */
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-title-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.task-title-container input {
+    flex: 1;
+    padding-right: 10px;
+}
+
+#pinBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+#pinIcon.pinned {
+    color: #f39c12;
+}
