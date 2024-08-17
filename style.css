@@ -9,7 +9,7 @@ body, html {
 }
 
 /* Layout */
-#app {
+#app, #edit-container {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
@@ -25,8 +25,8 @@ h2, h3 {
 }
 
 h2 {
-    font-size: 22px;
-    margin-top: 30px;
+    font-size: 24px;
+    margin-top: 0;
     border-bottom: 2px solid #eee;
     padding-bottom: 10px;
 }
@@ -36,61 +36,90 @@ h3 {
     color: #7f8c8d;
 }
 
-/* Header and task input */
-header {
-    margin-bottom: 20px;
-}
-
-#task-input {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-#taskTitle, #taskTime {
-    flex: 1;
+/* Form elements */
+input[type="text"], 
+input[type="datetime-local"], 
+textarea {
+    width: 100%;
     padding: 10px;
+    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
 }
 
-#taskTitle:focus, #taskTime:focus {
+input[type="text"]:focus, 
+input[type="datetime-local"]:focus, 
+textarea:focus {
     border-color: #3498db;
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
     outline: none;
 }
 
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #7f8c8d;
+}
+
 /* Buttons */
-button, .task-btn, #add-task-btn, #toggle-btn {
+button {
     padding: 10px 15px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 16px;
+    margin-right: 10px;
 }
 
-#add-task-btn {
+button:last-child {
+    margin-right: 0;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#add-task-btn, button[onclick="saveTask()"] {
     background-color: #3498db;
     color: white;
 }
 
-#add-task-btn:hover {
+#add-task-btn:hover, button[onclick="saveTask()"]:hover {
     background-color: #2980b9;
 }
 
-#toggle-btn {
+button[onclick="window.close()"] {
+    background-color: #e74c3c;
+    color: white;
+}
+
+button[onclick="window.close()"]:hover {
+    background-color: #c0392b;
+}
+
+#toggle-btn, #pinBtn {
     background: none;
     color: #7f8c8d;
     font-size: 20px;
     padding: 10px;
-    transition: all 0.3s ease;
 }
 
-#toggle-btn:hover {
+#toggle-btn:hover, #pinBtn:hover {
     color: #2c3e50;
+}
+
+#toggle-btn.active, #pinBtn.active {
+    color: #3498db;
+    transform: rotate(45deg);
 }
 
 .task-btn {
@@ -102,6 +131,38 @@ button, .task-btn, #add-task-btn, #toggle-btn {
 
 .task-btn:hover {
     color: #3498db;
+}
+
+/* Task header (for edit page) */
+.task-header {
+    margin-bottom: 15px;
+}
+
+.task-title-container {
+    display: flex;
+    align-items: center;
+}
+
+.task-title-container input[type="text"] {
+    flex-grow: 1;
+    margin-bottom: 0;
+    margin-right: 10px;
+}
+
+#pinBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px 10px;
+}
+
+#pinIcon {
+    transition: color 0.3s ease;
+}
+
+#pinIcon.pinned {
+    color: #f39c12;
 }
 
 /* Sort controls */
@@ -182,59 +243,6 @@ ul {
     gap: 5px;
 }
 
-/* Dialog */
-#dialog {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    width: 90%;
-    max-width: 400px;
-}
-
-#dialog input,
-#dialog textarea {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-
-#dialog input:focus,
-#dialog textarea:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-    outline: none;
-}
-
-/* Edit container */
-#edit-container {
-    padding: 20px;
-    max-width: 100%;
-}
-
-#edit-container h2 {
-    margin-bottom: 20px;
-}
-
-#edit-container textarea {
-    height: 150px;
-    resize: vertical;
-}
-
-#edit-container button {
-    margin-right: 10px;
-}
-
 /* Status */
 #status {
     margin-top: 20px;
@@ -244,28 +252,35 @@ ul {
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
-    #task-input {
-        flex-wrap: wrap;
+    #task-input, #edit-container {
+        flex-direction: column;
     }
     
-    #taskTitle, #taskTime {
-        flex-basis: 100%;
+    #taskTitle, #taskTime, #editTaskTitle, #editTaskTime {
+        width: 100%;
+        margin-bottom: 10px;
     }
     
-    #add-task-btn, #toggle-btn {
-        flex-basis: calc(50% - 5px);
+    #add-task-btn, #toggle-btn, #pinBtn {
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     #task-lists {
         flex-direction: column;
     }
-}
 
-#toggle-btn.active {
-    color: #3498db;
-    transform: rotate(45deg);
-}
+    .task-title-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-#toggle-btn:hover {
-    color: #2c3e50;
+    .task-title-container input[type="text"] {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    #pinBtn {
+        align-self: flex-end;
+    }
 }

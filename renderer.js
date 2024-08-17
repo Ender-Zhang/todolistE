@@ -5,7 +5,7 @@ const db = new sqlite3.Database('tasks.db');
 
 let tasks = [];
 let isAlwaysOnTop = false;
-
+let sortAscending = true;  // 初始化为升序
 
 db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, title TEXT, time TEXT, details TEXT, completed INTEGER)");
@@ -47,6 +47,13 @@ function loadTasksFromDatabase() {
 }
 
 function renderTasks() {
+    // 根据 sortAscending 变量决定排序方式
+    tasks.sort((a, b) => {
+        const timeA = new Date(a.time);
+        const timeB = new Date(b.time);
+        return sortAscending ? timeA - timeB : timeB - timeA;
+    });
+
     const unfinishedTasks = document.getElementById('unfinishedTasks');
     const finishedTasks = document.getElementById('finishedTasks');
     
@@ -90,8 +97,6 @@ function deleteTask(taskId) {
     renderTasks();
 }
 
-// let isAlwaysOnTop = false;
-
 function toggleAlwaysOnTop() {
     isAlwaysOnTop = !isAlwaysOnTop;
     ipcRenderer.send('toggle-always-on-top', isAlwaysOnTop);
@@ -106,21 +111,6 @@ function updateToggleButton() {
     } else {
         toggleBtn.classList.remove('active');
         toggleBtn.title = 'Always On Top: Off';
-    }
-}
-
-function updateStatus() {
-    const status = document.getElementById('status');
-    status.textContent = isAlwaysOnTop ? 'Current Status: Always on Top' : 'Current Status: Not Always on Top';
-    
-    // 更新按钮样式（可选）
-    const toggleBtn = document.getElementById('toggle-btn');
-    if (isAlwaysOnTop) {
-        toggleBtn.style.backgroundColor = '#f1c40f';
-        toggleBtn.style.color = 'white';
-    } else {
-        toggleBtn.style.backgroundColor = 'white';
-        toggleBtn.style.color = '#3498db';
     }
 }
 
@@ -147,5 +137,13 @@ function initializeApp() {
     loadTasksFromDatabase();
     updateStatus();
 }
+
+// function toggleSortOrder() {
+//     sortAscending = !sortAscending;
+//     renderTasks();
+// }
+
+// 在合适的位置添加事件监听器
+document.getElementById('sort-btn').addEventListener('click', toggleSortOrder);
 
 initializeApp();

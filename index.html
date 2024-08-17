@@ -3,33 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ToDo List</title>
+  <title>Task Manager</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <div id="top-bar">
-    <h1>ToDo List</h1>
-    <button onclick="toggleAlwaysOnTop()" id="toggle-btn" title="Toggle Always On Top">
-      <i class="fas fa-thumbtack"></i>
-    </button>
-  </div>
-  
-  <div id="container">
-    <label for="taskTitle">Task Title:</label>
-    <input type="text" id="taskTitle" name="taskTitle" placeholder="Enter task title">
+  <div id="app">
+    <header>
+      <div id="task-input">
+        <input type="text" id="taskTitle" name="taskTitle" placeholder="Enter task title">
+        <input type="datetime-local" id="taskTime" name="taskTime">
+        <button onclick="addTask()" id="add-task-btn">Add Task</button>
+        <button onclick="toggleAlwaysOnTop()" id="toggle-btn" title="Toggle Always On Top">
+          <i class="fas fa-thumbtack"></i>
+        </button>
+      </div>
+    </header>
     
-    <label for="taskTime">Task Time:</label>
-    <input type="datetime-local" id="taskTime" name="taskTime">
-    
-    <button onclick="addTask()">Add Task</button>
-    
-    <h2>Unfinished Tasks</h2>
-    <ul id="unfinishedTasks"></ul>
-    
-    <h2>Completed Tasks</h2>
-    <ul id="finishedTasks"></ul>
+    <!-- <main>
+      <section id="sort-controls">
+        <h3>Sort by:</h3>
+        <div id="sort-buttons">
+          <button class="sort-btn" data-sort="title">Title</button>
+          <button class="sort-btn" data-sort="time">Time</button>
+          <button class="sort-btn" data-sort="completed">Status</button>
+        </div>
+      </section> -->
+      
+      <section id="task-lists">
+        <div id="unfinished-tasks">
+          <h2>Unfinished Tasks</h2>
+          <ul id="unfinishedTasks"></ul>
+        </div>
+        
+        <div id="finished-tasks">
+          <h2>Completed Tasks</h2>
+          <ul id="finishedTasks"></ul>
+        </div>
+      </section>
+    </main>
   </div>
 
   <script src="renderer.js"></script>

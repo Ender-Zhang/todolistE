@@ -52,5 +52,8 @@
   "devDependencies": {
     "electron": "^25.0.0",
     "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
   }
 }
