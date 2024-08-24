@@ -166,7 +166,11 @@ function createEditWindow(taskData) {
 
 ipcMain.on('update-task', (event, updatedTask) => {
   console.log('Received updated task:', updatedTask);  // 调试：确认主进程接收到更新的任务数据
-  db.run(`UPDATE tasks SET title = ?, time = ?, details = ?, completed = ? WHERE id = ?`,
+
+  const sql = `UPDATE tasks SET title = ?, time = ?, details = ?, completed = ? WHERE id = ?`;
+  console.log('Executing SQL:', sql, [updatedTask.title, updatedTask.time, updatedTask.details, updatedTask.completed, updatedTask.id]);
+
+  db.run(sql,
       [updatedTask.title, updatedTask.time, updatedTask.details, updatedTask.completed, updatedTask.id],
       (err) => {
           if (err) {
@@ -180,6 +184,7 @@ ipcMain.on('update-task', (event, updatedTask) => {
       }
   );
 });
+
 
 
 
