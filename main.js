@@ -164,7 +164,7 @@ function createEditWindow(taskData) {
 }
 
 
-ipcMain.on('task-updated', (event, updatedTask) => {
+ipcMain.on('update-task', (event, updatedTask) => {
   console.log('Received updated task:', updatedTask);  // 调试：确认主进程接收到更新的任务数据
   db.run(`UPDATE tasks SET title = ?, time = ?, details = ?, completed = ? WHERE id = ?`,
       [updatedTask.title, updatedTask.time, updatedTask.details, updatedTask.completed, updatedTask.id],
